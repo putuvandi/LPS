@@ -228,12 +228,13 @@ namespace LPS
                         {
                             string namacust = dataGridView1.Rows[i].Cells[2].Value.ToString();
                             string fixnama = namacust.Replace("'", "\'");
-                            cmd.CommandText = @"insert into notaproses (nota,customer,br,tempo,loading,id_lps,idUrutan)values(@nota2,@customer2,@br2,@tempo2,@loading2,@id_lps2,@idUrutan2)";
+                            cmd.CommandText = @"insert into notaproses (nota,customer,area,br,tempo,loading,id_lps,idUrutan)values(@nota2,@customer2,@area2,@br2,@tempo2,@loading2,@id_lps2,@idUrutan2)";
                             cmd.CommandType = CommandType.Text;
                             cmd.Connection = con;
 
                             cmd.Parameters.Add("@nota2", MySqlDbType.VarChar).Value = dataGridView1.Rows[i].Cells[1].Value.ToString();
                             cmd.Parameters.Add("@customer2", MySqlDbType.VarChar).Value = fixnama;
+                            cmd.Parameters.Add("@area2", MySqlDbType.VarChar).Value = textBox4.Text;
                             cmd.Parameters.Add("@br2", MySqlDbType.VarChar).Value = dataGridView1.Rows[i].Cells[10].Value.ToString();
                             cmd.Parameters.Add("@tempo2", MySqlDbType.VarChar).Value = dataGridView1.Rows[i].Cells[3].Value.ToString();
                             cmd.Parameters.Add("@loading2", MySqlDbType.VarChar).Value = dataGridView1.Rows[i].Cells[5].Value.ToString();

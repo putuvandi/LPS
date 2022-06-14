@@ -126,7 +126,7 @@ namespace LPS
             {
                 using (MySqlCommand cmd = new MySqlCommand())
                 {
-                    cmd.CommandText = @"select notaproses.nota ,notaproses.br,notaproses.keterangan2, notaproses.tempo,notaproses.customer, lps.tgl, lps.periode, notaproses.tonase, lps.driver, lps.helper,notaproses.kembali, notaproses.keterangan,lps.time,lps.id_lps from notaproses JOIN lps ON lps.id_lps = notaproses.id_lps where lps.year between @awal and @akhir and lps.periode = @bulan order by lps.year asc, lps.driver asc, lps.time asc,notaproses.id_lps asc,notaproses.idUrutan asc";
+                    cmd.CommandText = @"select notaproses.nota ,notaproses.br,notaproses.keterangan2, notaproses.tempo,notaproses.customer, notaproses.area, lps.tgl, lps.periode, notaproses.tonase, lps.driver, lps.helper,notaproses.kembali, notaproses.keterangan,lps.time,lps.id_lps from notaproses JOIN lps ON lps.id_lps = notaproses.id_lps where lps.year between @awal and @akhir and lps.periode = @bulan order by notaproses.id_lps asc, notaproses.idUrutan asc";
                     cmd.CommandType = CommandType.Text;
                     cmd.Connection = con;
 
@@ -158,7 +158,7 @@ namespace LPS
                         {
                             category = "SUMBER HIDUP";
                         }
-                        dataGridView1.Rows.Add($"{reader.GetString("tgl") + "-" + year + "-" + tahun}", $"{reader.GetString("periode")}", $"{reader.GetString("time")}", $"{reader.GetString("nota")}", $"{category}", $"{reader.GetString("tempo")}", $"{reader.GetString("customer")}", $"{reader.GetString("br")}", $"{reader.GetString("tonase")}", $"{reader.GetString("driver")}", $"{reader.GetString("helper")}", $"{reader.GetString("keterangan")}", $"{reader.GetString("kembali")}", $"{reader.GetString("keterangan2")}", $"{reader.GetString("id_lps")}");
+                        dataGridView1.Rows.Add($"{reader.GetString("tgl") + "-" + year + "-" + tahun}", $"{reader.GetString("periode")}", $"{reader.GetString("time")}", $"{reader.GetString("nota")}", $"{category}", $"{reader.GetString("tempo")}", $"{reader.GetString("customer")}", $"{reader.GetString("area")}", $"{reader.GetString("br")}", $"{reader.GetString("tonase")}", $"{reader.GetString("driver")}", $"{reader.GetString("helper")}", $"{reader.GetString("keterangan")}", $"{reader.GetString("kembali")}", $"{reader.GetString("keterangan2")}", $"{reader.GetString("id_lps")}");
 
                     }
                     cmd.Parameters.Clear();
@@ -178,79 +178,88 @@ namespace LPS
             this.dataGridView1.DataSource = null;
             this.dataGridView1.Rows.Clear();
             Cursor.Current = Cursors.WaitCursor;
-            using (MySqlCommand cmd = new MySqlCommand())
+            try
             {
-                cmd.CommandText = @"select notaproses.nota ,notaproses.br,notaproses.keterangan2, notaproses.tempo,notaproses.customer, lps.tgl, lps.periode, notaproses.tonase, lps.driver, lps.helper,notaproses.kembali, notaproses.keterangan,lps.time,lps.id_lps from notaproses JOIN lps ON lps.id_lps = notaproses.id_lps where lps.year between @awal and 31 and lps.periode = @bulan order by lps.year asc, lps.driver asc, lps.time asc,notaproses.id_lps asc,notaproses.idUrutan asc";
-                cmd.CommandType = CommandType.Text;
-                cmd.Connection = con;
-
-                cmd.Parameters.Add("@bulan", MySqlDbType.VarChar).Value = bulan;
-                //cmd.Parameters.Add("@bulan2", MySqlDbType.VarChar).Value = bulan2;
-                cmd.Parameters.Add("@awal", MySqlDbType.VarChar).Value = awal;
-                cmd.Parameters.Add("@akhir", MySqlDbType.VarChar).Value = akhir;
-                con.Open();
-                cmd.ExecuteNonQuery();
-
-
-                MySqlDataReader reader = cmd.ExecuteReader();
-
-                while (reader.Read())
+                using (MySqlCommand cmd = new MySqlCommand())
                 {
+                    cmd.CommandText = @"select notaproses.nota, notaproses.br, notaproses.keterangan2, notaproses.tempo, notaproses.customer, notaproses.area, lps.tgl, lps.periode, notaproses.tonase, lps.driver, lps.helper,notaproses.kembali, notaproses.keterangan,lps.time,lps.id_lps from notaproses JOIN lps ON lps.id_lps = notaproses.id_lps where lps.year between @awal and 31 and lps.periode = @bulan order by notaproses.id_lps asc, notaproses.idUrutan asc";
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = con;
 
-                    //textBox3.Text += $"{reader.GetString("customer")}";
-                    String cat = reader.GetString("nota");
-                    String bln = reader.GetString("periode");
-                    string res = cat.Substring(0, 1);
-                    string category;
-                    string year = bln.Substring(0, 3);
-                    if (res.Equals("1"))
-                    {
-                        category = "SURYA PANGAN";
-                    }
-                    else
-                    {
-                        category = "SUMBER HIDUP";
-                    }
-                    dataGridView1.Rows.Add($"{reader.GetString("tgl") + "-" + year + "-" + tahun}", $"{reader.GetString("periode")}", $"{reader.GetString("time")}", $"{reader.GetString("nota")}", $"{category}", $"{reader.GetString("tempo")}", $"{reader.GetString("customer")}", $"{reader.GetString("br")}", $"{reader.GetString("tonase")}", $"{reader.GetString("driver")}", $"{reader.GetString("helper")}", $"{reader.GetString("keterangan")}", $"{reader.GetString("kembali")}", $"{reader.GetString("keterangan2")}");
+                    cmd.Parameters.Add("@bulan", MySqlDbType.VarChar).Value = bulan;
+                    //cmd.Parameters.Add("@bulan2", MySqlDbType.VarChar).Value = bulan2;
+                    cmd.Parameters.Add("@awal", MySqlDbType.VarChar).Value = awal;
+                    cmd.Parameters.Add("@akhir", MySqlDbType.VarChar).Value = akhir;
+                    con.Open();
+                    cmd.ExecuteNonQuery();
 
+
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+
+                        //textBox3.Text += $"{reader.GetString("customer")}";
+                        String cat = reader.GetString("nota");
+                        String bln = reader.GetString("periode");
+                        string res = cat.Substring(0, 1);
+                        string category;
+                        string year = bln.Substring(0, 3);
+                        if (res.Equals("1"))
+                        {
+                            category = "SURYA PANGAN";
+                        }
+                        else
+                        {
+                            category = "SUMBER HIDUP";
+                        }
+                        dataGridView1.Rows.Add($"{reader.GetString("tgl") + "-" + year + "-" + tahun}", $"{reader.GetString("periode")}", $"{reader.GetString("time")}", $"{reader.GetString("nota")}", $"{category}", $"{reader.GetString("tempo")}", $"{reader.GetString("customer")}", $"{reader.GetString("area")}", $"{reader.GetString("br")}", $"{reader.GetString("tonase")}", $"{reader.GetString("driver")}", $"{reader.GetString("helper")}", $"{reader.GetString("keterangan")}", $"{reader.GetString("kembali")}", $"{reader.GetString("keterangan2")}");
+
+                    }
+                    cmd.Parameters.Clear();
+                    con.Close();
+
+                    cmd.CommandText = @"select notaproses.nota ,notaproses.br,notaproses.keterangan2, notaproses.tempo,notaproses.customer, notaproses.area, lps.tgl, lps.periode, notaproses.tonase, lps.driver, lps.helper,notaproses.kembali, notaproses.keterangan,lps.time,lps.id_lps from notaproses JOIN lps ON lps.id_lps = notaproses.id_lps where lps.periode = @bulan2 and lps.tgl BETWEEN 1 AND @akhir order by notaproses.id_lps asc, notaproses.idUrutan asc";
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Connection = con;
+                    con.Open();
+                    cmd.Parameters.Add("@bulan2", MySqlDbType.VarChar).Value = bulan2;
+                    cmd.Parameters.Add("@akhir", MySqlDbType.VarChar).Value = akhir;
+                    //cmd.Parameters.Add("@akhir", MySqlDbType.VarChar).Value = akhir;
+
+                    cmd.ExecuteNonQuery();
+
+                    MySqlDataReader reader2 = cmd.ExecuteReader();
+                    while (reader2.Read())
+                    {
+
+                        //textBox3.Text += $"{reader.GetString("customer")}";
+                        String cat = reader2.GetString("nota");
+                        string res = cat.Substring(0, 1);
+                        String bln2 = reader2.GetString("periode");
+                        string category;
+                        string year2 = bln2.Substring(0, 3);
+                        if (res.Equals("1"))
+                        {
+                            category = "SURYA PANGAN";
+                        }
+                        else
+                        {
+                            category = "SUMBER HIDUP";
+                        }
+                        dataGridView1.Rows.Add($"{reader2.GetString("tgl") + "-" + year2 + "-" + tahun}", $"{reader2.GetString("periode")}", $"{reader2.GetString("time")}", $"{reader2.GetString("nota")}", $"{category}", $"{reader2.GetString("tempo")}", $"{reader2.GetString("customer")}", $"{reader2.GetString("area")}", $"{reader2.GetString("br")}", $"{reader2.GetString("tonase")}", $"{reader2.GetString("driver")}", $"{reader2.GetString("helper")}", $"{reader2.GetString("keterangan")}", $"{reader2.GetString("kembali")}", $"{reader2.GetString("keterangan2")}");
+
+                    }
+                    cmd.Parameters.Clear();
+                    con.Close();
                 }
-                cmd.Parameters.Clear();
-                con.Close();
 
-                cmd.CommandText = @"select notaproses.nota , notaproses.br,notaproses.keterangan2, notaproses.tempo,notaproses.customer, lps.tgl, lps.periode, notaproses.tonase, lps.driver, lps.helper,notaproses.kembali, notaproses.keterangan,lps.time from notaproses JOIN lps ON lps.id_lps = notaproses.id_lps where lps.periode = @bulan2 and lps.tgl BETWEEN 1 AND @akhir order by lps.year asc, lps.driver asc, lps.time asc,notaproses.id_lps asc,notaproses.idUrutan asc";
-                cmd.CommandType = CommandType.Text;
-                cmd.Connection = con;
-                con.Open();
-                cmd.Parameters.Add("@bulan2", MySqlDbType.VarChar).Value = bulan2;
-                cmd.Parameters.Add("@akhir", MySqlDbType.VarChar).Value = akhir;
-                //cmd.Parameters.Add("@akhir", MySqlDbType.VarChar).Value = akhir;
-
-                cmd.ExecuteNonQuery();
-
-                MySqlDataReader reader2 = cmd.ExecuteReader();
-                while (reader2.Read())
-                {
-
-                    //textBox3.Text += $"{reader.GetString("customer")}";
-                    String cat = reader2.GetString("nota");
-                    string res = cat.Substring(0, 1);
-                    String bln2 = reader2.GetString("periode");
-                    string category;
-                    string year2 = bln2.Substring(0, 3);
-                    if (res.Equals("1"))
-                    {
-                        category = "SURYA PANGAN";
-                    }
-                    else
-                    {
-                        category = "SUMBER HIDUP";
-                    }
-                    dataGridView1.Rows.Add($"{reader2.GetString("tgl") + "-" + year2 + "-" + tahun}", $"{reader2.GetString("periode")}", $"{reader2.GetString("time")}", $"{reader2.GetString("nota")}", $"{category}", $"{reader2.GetString("tempo")}", $"{reader2.GetString("customer")}", $"{reader2.GetString("br")}", $"{reader2.GetString("tonase")}", $"{reader2.GetString("driver")}", $"{reader2.GetString("helper")}", $"{reader2.GetString("keterangan")}", $"{reader2.GetString("kembali")}", $"{reader2.GetString("keterangan2")}");
-
-                }
-                cmd.Parameters.Clear();
-                con.Close();
             }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
+            //con.Close();
             Cursor.Current = Cursors.Default;
         }
 
@@ -324,7 +333,7 @@ namespace LPS
                 range2.Borders.Weight = Excel.XlBorderWeight.xlThin;
 
                 int count = dataGridView1.Rows.Count + 11;
-                Excel.Range range3 = xlWorkSheet.get_Range("B12:O" + count).Cells;
+                Excel.Range range3 = xlWorkSheet.get_Range("B12:P" + count).Cells;
                 range3.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
                 range3.Borders.Weight = Excel.XlBorderWeight.xlThin;
 

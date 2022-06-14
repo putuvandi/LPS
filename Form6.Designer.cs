@@ -41,6 +41,7 @@
             this.Category = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Payment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Customer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Area = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BR = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Tonase = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Driver = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -81,6 +82,7 @@
             this.Category,
             this.Payment,
             this.Customer,
+            this.Area,
             this.BR,
             this.Tonase,
             this.Driver,
@@ -167,6 +169,12 @@
             this.Customer.Name = "Customer";
             this.Customer.ReadOnly = true;
             // 
+            // Area
+            // 
+            this.Area.HeaderText = "Area";
+            this.Area.Name = "Area";
+            this.Area.ReadOnly = true;
+            // 
             // BR
             // 
             this.BR.HeaderText = "Billing Rate";
@@ -247,6 +255,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Category;
         private System.Windows.Forms.DataGridViewTextBoxColumn Payment;
         private System.Windows.Forms.DataGridViewTextBoxColumn Customer;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Area;
         private System.Windows.Forms.DataGridViewTextBoxColumn BR;
         private System.Windows.Forms.DataGridViewTextBoxColumn Tonase;
         private System.Windows.Forms.DataGridViewTextBoxColumn Driver;
